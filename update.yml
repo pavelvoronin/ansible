@@ -1,0 +1,5 @@
+- hosts: ubuntu
+  tasks:
+  - name: update packeges
+    sudo: true
+    apt: update_cache=yes upgrade=yes state=latest

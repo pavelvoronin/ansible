@@ -1,0 +1,22 @@
+- name: Install epel
+  yum: name=epel-release state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Install nginx CentOS
+  yum: name=nginx state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Install nginx Debian/Ubuntu
+  sudo: true
+  apt: name=nginx state=present
+  when: ansible_os_family == "Debian"
+
+- name: Create directory for virtualhost
+  file: dest=/srv/{{ server_name }} state=directory
+
+- name: Copy virtualhost config
+  template: src=default.conf dest=/etc/nginx/conf.d/{{ server_name }}.conf
+
+- name: Copy index.html
+  template: src=index.html dest=/srv/{{ server_name}}/index.html
+  notify: restart nginx
